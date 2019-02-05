@@ -1,23 +1,22 @@
-var CANVAS_W = 600;
-var CANVAS_H = 700;
-
 var BALL_COLOR = [125, 253, 254];
 var BALL_SIZE = 20;
 var BALL_START_Y = 10;
 var BALL_DROP_SPEED = 3;
 var BALL_MOVE_SPEED = 5;
-var BALL_MUL = (MUL)=>{
+var BALL_MUL = (MUL) => {
     return BALL_START_Y + BALL_SIZE / 2 + BALL_DROP_SPEED * MUL;
 }
 
 var STAIR_WEIGHT = 5;
 var STAIR_COLOR = 255;
-var STAIR_MAX_LEN = 100;
-var STAIR_MIN_LEN = 10;
+var STAIR_MAX_LEN = 200;
+var STAIR_MIN_LEN = 70;
 var STAIR_START_Y = BALL_MUL(50);
 var STAIR_OFFSET = BALL_DROP_SPEED * 30;
 var STAIR_NUM = 5;
 
+var CANVAS_W = 600;
+var CANVAS_H = BALL_MUL(200);
 var GAME_SPEED = 3;
 
 var CHEATED = 0;
@@ -62,10 +61,13 @@ class Ball {
 class Stair {
     constructor() {
         this.x_arr = [];
+        this.stair_len_arr = [];
         this.y = STAIR_START_Y;
         this.stair_coord = [];
-        for (var i = 0; i < STAIR_NUM; i++)
+        for (var i = 0; i < STAIR_NUM; i++) {
             this.x_arr.push(random(0, width - STAIR_MAX_LEN));
+            this.stair_len_arr.push(random(STAIR_MIN_LEN, STAIR_MAX_LEN));
+        }
     }
 
     display() {
@@ -74,8 +76,8 @@ class Stair {
         stroke(STAIR_COLOR);
 
         for (var i = 0; i < STAIR_NUM; i++) {
-            var stair_len = STAIR_MAX_LEN;
             var stair_y = this.y + STAIR_OFFSET * i;
+            var stair_len = this.stair_len_arr[i];
             line(this.x_arr[i], stair_y, this.x_arr[i] + stair_len, stair_y);
             this.stair_coord.push([stair_y, this.x_arr[i], this.x_arr[i] + stair_len]);
         }
@@ -89,8 +91,6 @@ function setup() {
     ball = new Ball();
     stair = new Stair();
     stair.display();
-    for (var i = 0; i < stair.stair_coord.length; i++)
-        console.log(stair.stair_coord[i][0]);
 }
 
 
