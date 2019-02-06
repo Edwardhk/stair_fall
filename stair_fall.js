@@ -1,4 +1,4 @@
-var GAME_SPEED = 3;
+var GAME_SPEED = 2;
 
 var BALL_COLOR = [125, 253, 254];
 var BALL_SIZE = 20;
@@ -9,7 +9,7 @@ var BALL_MUL = (MUL) => {
     return BALL_START_Y + BALL_SIZE / 2 + BALL_DROP_SPEED * MUL;
 }
 
-var STAIR_THICK = 10;
+var STAIR_THICK = 5;
 var STAIR_COLOR = 255;
 var STAIR_MAX_LEN = 200;
 var STAIR_MIN_LEN = 70;
@@ -50,16 +50,18 @@ class Ball {
 
         // CHECK COLLISION
         else {
-            this.drop_speed = BALL_DROP_SPEED;
             var ball_bot = this.y + BALL_SIZE / 2;
             for (var i = 0; i < stair_rect.length; i++) {
                 var stair_y = stair_rect[i][0];
                 var start_x = stair_rect[i][1];
                 var end_x = stair_rect[i][1] + stair_rect[i][2];
 
-                if (ball_bot >= stair_y && ball_bot <= stair_y + STAIR_THICK) {
+                if (ball_bot > stair_y && ball_bot < stair_y + STAIR_THICK) {
                     if (this.x >= start_x && this.x <= end_x)
-                        this.drop_speed = -3;
+                        this.drop_speed = -GAME_SPEED;
+
+                    else
+                        this.drop_speed = BALL_DROP_SPEED;
                 }
             }
             this.y += this.drop_speed;
